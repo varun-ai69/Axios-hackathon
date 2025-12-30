@@ -63,6 +63,10 @@ This system converts private documents into searchable vector embeddings and use
 * **Node.js**
 * **Express.js**
 
+### Frontend
+
+* **React**
+
 ### AI / ML
 
 * **Embedding Model:** HuggingFace Sentence Transformer
