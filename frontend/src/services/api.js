@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // Create axios instance with base configuration
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api',
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:3000/api',
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
@@ -39,11 +39,31 @@ api.interceptors.response.use(
 
 // 🔐 Authentication Endpoints
 export const authAPI = {
-  // Register new user
-  register: (userData) => api.post('/auth/register', userData),
-  
   // User login
-  login: (credentials) => api.post('/auth/login', credentials),
+  login: async (credentials) => {
+    console.log('🔐 Attempting login with:', credentials);
+    console.log('🔐 API URL:', `${api.baseURL}/auth/login`);
+    try {
+      const response = await api.post('/auth/login', credentials);
+      console.log('🔐 Login response:', response.data);
+      return response;
+    } catch (error) {
+      console.error('🔐 Login error:', error.response?.data || error.message);
+      throw error;
+    }
+  },
+  // Register new user
+  register: async (userData) => {
+    console.log('🔐 Attempting registration with:', userData);
+    try {
+      const response = await api.post('/auth/register', userData);
+      console.log('🔐 Registration response:', response.data);
+      return response;
+    } catch (error) {
+      console.error('🔐 Registration error:', error.response?.data || error.message);
+      throw error;
+    }
+  }
 };
 
 // 📄 Document Ingestion Endpoints
@@ -112,7 +132,9 @@ export const monitoringAPI = {
 // 🤖 Chatbot Endpoints
 export const chatbotAPI = {
   // Query chatbot
-  queryChatbot: (queryData) => api.post('/chatbot/query', queryData),
+  query: (queryData) => api.post('/chatbot/query', queryData),
+  // Get chatbot status
+  status: () => api.get('/chatbot/status'),
 };
 
 // 👥 Employee Registration Endpoints

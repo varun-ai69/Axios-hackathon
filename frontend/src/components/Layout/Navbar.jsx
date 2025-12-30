@@ -20,7 +20,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../hooks/useToast';
 
 const Navbar = () => {
-  const { user, logoutUser } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { addToast } = useToast();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -28,7 +28,7 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleLogout = () => {
-    logoutUser();
+    logout();
     navigate('/login');
     addToast('Logged out successfully', 'success');
   };

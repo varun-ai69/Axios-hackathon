@@ -11,11 +11,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-<<<<<<< Updated upstream
-  const { loginUser, testLogin, testUsers } = useAuth();
-=======
-  const { login, user } = useAuth();
->>>>>>> Stashed changes
+const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -28,41 +24,28 @@ const Login = () => {
     setLoading(true);
     setError('');
 
-    try {
-      // Try test login first
-      const testLoginSuccess = testLogin(formData.email, formData.password);
-      
-      if (testLoginSuccess) {
-        setSuccess('Login successful!');
-        setTimeout(() => {
-          const user = Object.values(testUsers).find(u => u.email === formData.email);
-          if (user.role === 'admin') {
-            navigate('/admin/dashboard');
-          } else {
-            navigate('/employee/dashboard');
-          }
-        }, 500);
-        return;
-      }
+    console.log('🔍 Login attempt with:', formData);
+    console.log('🌐 API URL:', process.env.REACT_APP_API_URL || 'http://localhost:3000/api');
 
-      // Fallback to API login
+    try {
+      // Use API login
       const response = await login(formData);
+      console.log('✅ Login response:', response);
       
-      if (response.success) {
-        setSuccess('Login successful!');
-        
-        setTimeout(() => {
-          if (user?.role === 'admin') {
-            navigate('/admin/dashboard');
-          } else {
-            navigate('/employee/dashboard');
-          }
-        }, 500);
-      } else {
-        setError(response.error || 'Login failed. Please try again.');
-      }
+      setSuccess('Login successful!');
+      
+      setTimeout(() => {
+        if (response.user?.role === 'ADMIN') {
+          console.log('🔄 Redirecting to admin dashboard');
+          navigate('/admin/dashboard');
+        } else {
+          console.log('🔄 Redirecting to employee dashboard');
+          navigate('/employee/dashboard');
+        }
+      }, 500);
     } catch (err) {
-      setError('Login failed. Please try again.');
+      console.error('❌ Login error:', err);
+      setError(err.message || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
     }

@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faRobot, faUser, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { queryChatbot } from '../../services/api';
+import { chatbotAPI } from '../../services/api';
 
 const EmployeeChatbot = () => {
   const [messages, setMessages] = useState([
@@ -27,18 +27,23 @@ const EmployeeChatbot = () => {
 
     const userMessage = { id: Date.now(), text: input, sender: 'user' };
     setMessages(prev => [...prev, userMessage]);
+    const currentInput = input;
     setInput('');
     setLoading(true);
 
     try {
-      const response = await queryChatbot(input);
+      console.log('🤖 Sending chatbot query:', currentInput);
+      const response = await chatbotAPI.query({ query: currentInput });
+      console.log('🤖 Chatbot response:', response.data);
       const botMessage = {
         id: Date.now() + 1,
-        text: response.answer || 'I found some information for you.',
+        text: response.data.answer || 'I found some information for you.',
         sender: 'bot',
+        sources: response.data.sources || []
       };
       setMessages(prev => [...prev, botMessage]);
     } catch (error) {
+      console.error('🤖 Chatbot error:', error);
       const errorMessage = {
         id: Date.now() + 1,
         text: 'Sorry, I encountered an error. Please try again.',
