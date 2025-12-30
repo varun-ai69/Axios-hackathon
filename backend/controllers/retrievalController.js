@@ -21,41 +21,41 @@
  * Query → Embed → Retrieve → Generate → Respond
  */
 
-const { embedQuery } = require("../services/embeddingService");
-const { searchVectors } = require("../services/vectorDB")
-const { askLLM } = require("../services/llmService")
+const { processRAGQuery } = require("../services/ragService");
 
 exports.askQuestion = async (req, res) => {
-
     try {
         const { question } = req.body;
         if (!question) {
             return res.status(400).json({ error: "Question is required" });
         }
-        // 1. Embed question - embeded the the question into embededQuery (numerical)
-        const queryEmbedding = await embedQuery(question);
 
-        // 2. Retrieve relevant chunks - search the embededQuery into vectorDB and return most relevant chunks
-        const results = await searchVectors(queryEmbedding, 5);
-
-        // 3. Build context - Building context that generated from searchingChunks
-        const context = results.map(r => r.payload.text).join("\n");
-
-        // 4. Ask LLM - final call to LLM model to answer the query given with the context we retrieve
-        const answer = await askLLM(context, question);
-
+        console.log('🔍 Search/Retrieval query:', question);
+        
+        // Use our existing RAG service
+        const userRole = req.user?.role || 'EMPLOYEE';
+        const ragResult = await processRAGQuery(question, userRole);
+        
+        // Format response to match expected structure
         res.json({
             question,
-            answer,
-            sources: results.map(r => ({
-                chunk_id: r.id,
-                source: r.payload.source
-            }))
+            answer: ragResult.answer,
+            sources: ragResult.sources.map((source, index) => ({
+                chunk_id: `chunk_${index}`,
+                source: source.title,
+                relevance: source.relevance,
+                snippet: source.snippet
+            })),
+            context_used: ragResult.context_used,
+            model: ragResult.model,
+            timestamp: ragResult.timestamp
         });
+        
     } catch (err) {
-        console.error("RAG ERROR:", err);
-        res.status(500).json({ error: "Failed to generate answer" });
+        console.error("🔍 Search/Retrieval ERROR:", err);
+        res.status(500).json({ 
+            error: "Failed to generate answer",
+            details: err.message 
+        });
     }
-
-
 };

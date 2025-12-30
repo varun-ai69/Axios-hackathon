@@ -8,7 +8,7 @@ async function debugTest() {
     console.log('✅ Connected to MongoDB');
     
     // Test User model directly
-    const User = require('./models/User');
+    const User = require('./models/user');
     const users = await User.find({}).select('-password').lean();
     console.log('✅ Users query successful:', users.length, 'users');
     
