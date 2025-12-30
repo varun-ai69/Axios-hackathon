@@ -12,7 +12,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const { loginUser } = useAuth();
+  const { loginUser, testLogin, testUsers } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -26,6 +26,23 @@ const Login = () => {
     setError('');
 
     try {
+      // Try test login first
+      const testLoginSuccess = testLogin(formData.email, formData.password);
+      
+      if (testLoginSuccess) {
+        setSuccess('Login successful!');
+        setTimeout(() => {
+          const user = Object.values(testUsers).find(u => u.email === formData.email);
+          if (user.role === 'admin') {
+            navigate('/admin/dashboard');
+          } else {
+            navigate('/employee/dashboard');
+          }
+        }, 500);
+        return;
+      }
+
+      // Fallback to API login
       const response = await login(formData);
       setSuccess('Login successful!');
       
