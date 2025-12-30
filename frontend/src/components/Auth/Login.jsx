@@ -4,7 +4,6 @@ import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLock, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { login } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 
 const Login = () => {
@@ -12,7 +11,11 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+<<<<<<< Updated upstream
   const { loginUser, testLogin, testUsers } = useAuth();
+=======
+  const { login, user } = useAuth();
+>>>>>>> Stashed changes
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -44,20 +47,22 @@ const Login = () => {
 
       // Fallback to API login
       const response = await login(formData);
-      setSuccess('Login successful!');
       
-      // Store user data and token
-      loginUser(response.user, response.token);
-      
-      setTimeout(() => {
-        if (response.user.role === 'admin') {
-          navigate('/admin/dashboard');
-        } else {
-          navigate('/employee/dashboard');
-        }
-      }, 500);
+      if (response.success) {
+        setSuccess('Login successful!');
+        
+        setTimeout(() => {
+          if (user?.role === 'admin') {
+            navigate('/admin/dashboard');
+          } else {
+            navigate('/employee/dashboard');
+          }
+        }, 500);
+      } else {
+        setError(response.error || 'Login failed. Please try again.');
+      }
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
+      setError('Login failed. Please try again.');
     } finally {
       setLoading(false);
     }
