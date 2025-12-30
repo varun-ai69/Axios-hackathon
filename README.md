@@ -1,5 +1,15 @@
 # WOFO -  RAG-Based Enterprise Knowledge Assistant 
 
+<img width="1919" height="1079" alt="Screenshot 2025-12-30 214939" src="https://github.com/user-attachments/assets/525673d8-52ef-4b92-a195-8ca7d6232253" />
+<img width="1919" height="1079" alt="Screenshot 2025-12-30 214946" src="https://github.com/user-attachments/assets/2c529fc6-95a8-4ebc-996a-43e144438103" />
+<img width="1919" height="1079" alt="Screenshot 2025-12-30 215007" src="https://github.com/user-attachments/assets/149f3481-db26-4d9b-8acf-6ae97133f91a" />
+<img width="1919" height="1079" alt="Screenshot 2025-12-30 215032" src="https://github.com/user-attachments/assets/6b9c9b9b-2738-4c53-b4ed-2c788765c584" />
+<img width="1919" height="1079" alt="Screenshot 2025-12-30 215041" src="https://github.com/user-attachments/assets/f62ae156-751a-4046-b089-94ab46100809" />
+<img width="1639" height="765" alt="Screenshot 2025-12-30 194211" src="https://github.com/user-attachments/assets/4d4b452b-63b7-4e7e-b562-5e9999f4e63b" />
+<img width="1919" height="965" alt="image" src="https://github.com/user-attachments/assets/e88db51d-b427-4f06-bb46-d7b47e38bf49" />
+
+
+
 A **Retrieval-Augmented Generation (RAG)** system designed for organizations to securely upload internal documents (policies, manuals, legal docs, FAQs, etc.) and allow employees to query them using natural language.
 
 This system converts private documents into searchable vector embeddings and uses a Large Language Model (LLM) to generate accurate, context-aware answers — **strictly based on company data**.
