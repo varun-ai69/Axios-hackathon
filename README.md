@@ -56,7 +56,7 @@ This system converts private documents into searchable vector embeddings and use
 
 ---
 
-##  Tech Stack
+## Tech Stack
 
 ### Backend
 
